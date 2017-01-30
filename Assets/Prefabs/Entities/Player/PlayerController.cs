@@ -2,9 +2,13 @@
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject Laser;
+
     public float Speed = 15;
 
     public float padding = 0.5f;
+
+    public float FiringRate = 0.2f;
 
     private float playerBoundaryMin;
 
@@ -31,7 +35,23 @@ public class PlayerController : MonoBehaviour
         {
             move(Vector3.right);
         }
-	}
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            InvokeRepeating("Fire", 0.01f, FiringRate);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            CancelInvoke("Fire");
+        }
+    }
+
+    private void Fire()
+    {
+        GameObject laserbeam = Instantiate(Laser, transform.position, Quaternion.identity) as GameObject;
+        laserbeam.GetComponent<Rigidbody2D>().velocity = Vector3.up * Speed;
+    }
 
     private void move(Vector3 RelDirection)
     {
