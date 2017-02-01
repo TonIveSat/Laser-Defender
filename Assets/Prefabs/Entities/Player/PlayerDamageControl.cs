@@ -1,26 +1,23 @@
 ﻿using UnityEngine;
 
-public class DamageControl : MonoBehaviour
+public class PlayerDamageControl : MonoBehaviour
 {
     public int InitialHealth = 20;
 
     private int currentHealth;
 
-	// Use this for initialization
 	void Start ()
     {
         currentHealth = InitialHealth;
     }
 
-    // Update is called once per frame
     void Update ()
     {
-		
 	}
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        var hitScript = collision.gameObject.GetComponent<PlayerProjectile>();
+        var hitScript = collision.gameObject.GetComponent<EnemyProjectile>();
         if (hitScript != null)
         {
             Hit(hitScript.Damage);
@@ -34,6 +31,7 @@ public class DamageControl : MonoBehaviour
         currentHealth -= Damage;
         if (currentHealth <= 0)
         {
+            new LevelManager().LoadLevel("Lose");
             Destroy(gameObject);
         }
     }
