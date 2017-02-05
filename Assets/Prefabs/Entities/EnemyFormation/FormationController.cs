@@ -9,6 +9,8 @@ public class FormationController : MonoBehaviour
 
     public float Speed = 2f;
 
+    public float SpawnDelay = 0.5f;
+
     private float formationBoundaryMin;
     private float formationBoundaryMax;
 
@@ -35,6 +37,21 @@ public class FormationController : MonoBehaviour
         }
     }
 
+    private void SpawnUntilFull()
+    {
+        Transform freePosition = NextFreePosition();
+        if (freePosition)
+        {
+            GameObject enemy = Instantiate(enemyPrefab, freePosition.position, Quaternion.identity) as GameObject;
+            enemy.transform.parent = freePosition;
+        }
+        if (NextFreePosition())
+        { 
+            Invoke("SpawnUntilFull", SpawnDelay);
+        }
+    }
+
+
     public void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(Width, Height, 0));
@@ -55,8 +72,21 @@ public class FormationController : MonoBehaviour
         if (AllMembersAreDead())
         {
             Debug.Log("Empty formation");
-            CreateEnemies();
+            SpawnUntilFull();
         }
+    }
+
+    private Transform NextFreePosition()
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.childCount == 0)
+            {
+                return child;
+            }
+        }
+
+        return null;
     }
 
     private bool AllMembersAreDead()
