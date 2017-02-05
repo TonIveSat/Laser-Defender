@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class FormationController : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public float Width = 10f;
@@ -16,16 +17,21 @@ public class EnemySpawner : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        var distance = transform.position.z - Camera.main.transform.position.z;
+        var leftMostPosition = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance));
+        var rightMostPosition = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
+        formationBoundaryMin = leftMostPosition.x + Width / 2;
+        formationBoundaryMax = rightMostPosition.x - Width / 2;
+
+        CreateEnemies();
+    }
+
+    private void CreateEnemies()
+    {
         foreach (Transform child in transform)
         {
             GameObject enemy = Instantiate(enemyPrefab, child.transform.position, Quaternion.identity) as GameObject;
             enemy.transform.parent = child;
-
-            var distance = transform.position.z - Camera.main.transform.position.z;
-            var leftMostPosition = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance));
-            var rightMostPosition = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
-            formationBoundaryMin = leftMostPosition.x + Width / 2;
-            formationBoundaryMax = rightMostPosition.x - Width / 2;
         }
     }
 
@@ -45,6 +51,25 @@ public class EnemySpawner : MonoBehaviour
         {
             move(Vector3.left);
         }
+
+        if (AllMembersAreDead())
+        {
+            Debug.Log("Empty formation");
+            CreateEnemies();
+        }
+    }
+
+    private bool AllMembersAreDead()
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.childCount > 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void move(Vector3 RelDirection)

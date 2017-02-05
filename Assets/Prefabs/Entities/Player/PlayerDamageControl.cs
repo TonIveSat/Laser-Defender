@@ -17,7 +17,7 @@ public class PlayerDamageControl : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        var hitScript = collision.gameObject.GetComponent<EnemyProjectile>();
+        var hitScript = collision.gameObject.GetComponent<Projectile>();
         if (hitScript != null)
         {
             Hit(hitScript.Damage);
