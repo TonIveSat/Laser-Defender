@@ -4,6 +4,8 @@ public class PlayerDamageControl : MonoBehaviour
 {
     public int InitialHealth = 20;
 
+    private LevelManager levelManager;
+
     private int currentHealth;
 
 	void Start ()
@@ -31,7 +33,8 @@ public class PlayerDamageControl : MonoBehaviour
         currentHealth -= Damage;
         if (currentHealth <= 0)
         {
-            new LevelManager().LoadLevel("Lose");
+            levelManager = GetComponent<LevelManager>();
+            levelManager.LoadLevel("Lose");
             Destroy(gameObject);
         }
     }
