@@ -6,10 +6,13 @@ public class DamageControl : MonoBehaviour
 
     private int currentHealth;
 
+    private ScoreKeeper scoreKeeper;
+
 	// Use this for initialization
 	void Start ()
     {
         currentHealth = InitialHealth;
+        scoreKeeper = FindObjectOfType<ScoreKeeper>().GetComponent<ScoreKeeper>();
     }
 
     // Update is called once per frame
@@ -34,6 +37,7 @@ public class DamageControl : MonoBehaviour
         currentHealth -= Damage;
         if (currentHealth <= 0)
         {
+            scoreKeeper.Score(Damage);
             Destroy(gameObject);
         }
     }
