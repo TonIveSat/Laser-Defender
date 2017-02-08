@@ -38,6 +38,8 @@ public class DamageControl : MonoBehaviour
         if (currentHealth <= 0)
         {
             scoreKeeper.Score(Damage);
+            AudioSource.PlayClipAtPoint(GetComponent<AudioSource>().clip, transform.position);
+
             Destroy(gameObject);
         }
     }

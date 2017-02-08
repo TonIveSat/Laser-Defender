@@ -10,6 +10,8 @@ public class EnemyController : MonoBehaviour
 
     public float FireRate = 0.5f;
 
+    public AudioClip FireringSound;
+
     // Use this for initialization
     void Start ()
     {
