@@ -5,7 +5,7 @@ public class ScoreKeeper : MonoBehaviour
 {
     public Text text;
          
-    private int score;
+    public static int TotalScore;
 
 	// Use this for initialization
 	void Start ()
@@ -21,14 +21,13 @@ public class ScoreKeeper : MonoBehaviour
 
     public void Score(int points)
     {
-        score += points;
+        TotalScore += points;
 
-        text.text = score.ToString();
+        text.text = TotalScore.ToString();
     }
 
-    public void Reset()
+    public static void Reset()
     {
-        score = 0;
-        text.text = "0";
+        TotalScore = 0;
     }
 }
