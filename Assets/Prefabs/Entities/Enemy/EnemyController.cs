@@ -12,18 +12,34 @@ public class EnemyController : MonoBehaviour
 
     public AudioClip FireringSound;
 
+    public float InitialFireDelay = 2f;
+
+    private System.DateTime birthTime;
+
+    private bool passiveMode = true;
+
     // Use this for initialization
     void Start ()
     {
-		
-	}
+        birthTime = System.DateTime.Now;
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if (Random.value <  (Time.deltaTime * FireRate))
+        if (passiveMode)
         {
-            Fire();
+            if (birthTime.AddSeconds(InitialFireDelay) < System.DateTime.Now)
+            {
+                passiveMode = false;
+            }
+        }
+        else
+        {
+            if (Random.value < (Time.deltaTime * FireRate))
+            {
+                Fire();
+            }
         }
 	}
 
